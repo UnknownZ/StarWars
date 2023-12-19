@@ -1,8 +1,11 @@
-import React from 'react'
+import { React, useContext } from 'react'
 import Favorite from "./Favorite"
+import { Context } from '../context/AppContext'
 
 
 function Sidebar() {
+    const { store: { favorites } } = useContext(Context)
+
     return (
         <>
             <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -12,12 +15,16 @@ function Sidebar() {
                 </div>
                 <div className="offcanvas-body">
                     <div>
-                        <p>Here you will find your favorites:</p><br/>                   
+                        <p>Here you will find your favorites:</p><br />
                     </div>
                     <ul className='list-group'>
-                        <Favorite
-                         name = "Favorite 1"
-                        />                        
+                        {
+                            favorites.map((item) => {
+                                return <Favorite
+                                    name={item}
+                                />
+                            })
+                        }
                     </ul>
                 </div>
             </div >

@@ -13,6 +13,8 @@ const StarshipContainer = () => {
       if(starships.length === 0){
         fetchStarships(URLS.URL_Starships)
       }
+      else
+      setIsLoading(false)
     }
     else 
     fetchStarships(URLS.URL_Starships)

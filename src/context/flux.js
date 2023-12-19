@@ -18,11 +18,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                     method: "GET",
                     headers: headersList
                 });
-                
+
 
                 let data = await response.json();
                 return data
-            },    
+            },
 
             setCharList: (list) => {
                 setStore({
@@ -37,6 +37,24 @@ const getState = ({ getStore, getActions, setStore }) => {
             setShipList: (list) => {
                 setStore({
                     starships: list
+                })
+            },
+            addFavorite: (favorite) => {
+                const {favorites} = getStore();
+
+                if(favorites.includes(favorite)) {
+                    getActions().deleteFavorite(favorite);
+                }
+                else
+                setStore({
+                    favorites: favorites.concat(favorite)
+                })
+            },
+            deleteFavorite: (favorite) => {
+                const {favorites} = getStore();
+
+                setStore({
+                    favorites: favorites.filter(f => f != favorite)
                 })
             },
         }

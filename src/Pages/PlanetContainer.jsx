@@ -14,7 +14,7 @@ const PlanetContainer = () => {
         fetchPlanets(URLS.URL_Planets)
       }
       else
-      setIsLoading(true)
+      setIsLoading(false)
     }
     else 
     fetchPlanets(URLS.URL_Planets)

@@ -1,9 +1,11 @@
 import {React, useContext} from 'react'
-import { Link, useLocation} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { Context } from '../context/AppContext'
 
 function Planets({ name, orbital_period, population}) {
+  const { store: { planets, favorites }, actions: { addFavorite } } = useContext(Context)
 
   return (
     <>
@@ -17,7 +19,9 @@ function Planets({ name, orbital_period, population}) {
             <Link className="btn btn-primary" 
             to={{pathname:"/planet"}}
             >Learn more!</Link>
-            <button className='btn btn-warning'><FontAwesomeIcon icon={faHeart} color="white" /></button>          </div>
+            <button className='btn btn-warning'
+            onClick={() => { addFavorite(name) }}
+            ><FontAwesomeIcon icon={faHeart} color="white" /></button>          </div>
         </div>
       </div>
     </>

@@ -13,6 +13,8 @@ function CharacterContainer() {
       if(people.length === 0){
         fetchCharacters(URLS.URL_Characters)
       }
+      else
+      setIsLoading(false)
     }
     else 
     fetchCharacters(URLS.URL_Characters)
