@@ -6,34 +6,34 @@ import URLS from '../config'
 const PlanetContainer = () => {
   const {store: { planets }, actions: {fetchURL, setPlanList }}  = useContext(Context)
   const [isLoading, setIsLoading] = useState(true)
+  const [nextPage, setNextPage] = useState("")
+  const [previousPage, setPreviousPage] = useState("")
 
   useEffect(() => {
-    if(planets)
-    {
-      if(planets.length === 0){
-        fetchPlanets(URLS.URL_Planets)
-      }
-      else
-      setIsLoading(false)
+    if (planets.length === 0) {
+      fetchPlanets(URLS.URL_Planets);
     }
-    else 
-    fetchPlanets(URLS.URL_Planets)
+    else {
+      setIsLoading(false);
+    }
   }, [])
 
   const fetchPlanets = async (URL) => {
-    let tempURL = URL
-    let planets = [];
-    let data
-    do {
-        data = await fetchURL(tempURL)
-        data.results.map((planet) => {
-            planets.push(planet)
-        })
-        tempURL = data.next
-    }
-    while (tempURL)
+    let data = await fetchURL(URL)
+    setPlanList(data.results)
+    setNextPage(data.next)
+    setPreviousPage(data.previous)
     setIsLoading(false)
-    setPlanList(planets)
+}
+
+const goToNext = () => {
+  fetchPlanets(nextPage)
+  setIsLoading(true)
+}
+
+const goToPrevious = () => {
+  fetchPlanets(previousPage)
+  setIsLoading(true)
 }
 
   return(
@@ -47,15 +47,30 @@ const PlanetContainer = () => {
       <div className="row g-4">
         <div className="card-group">
           {
-            planets.map((item) => {
+            planets.map((item,i) => {
              return <PlanetCard 
                 key={item.url}
                 name={item.name}
                 orbital_period={item.orbital_period}
                 population={item.population}
+                index={i}
               />
             })
           }
+          {previousPage ?
+                <button className='btn btn-primary cols-1' onClick={goToPrevious}>
+                  Previous Page
+                </button>
+                :
+                <></>}
+
+              {nextPage ?
+                <button className='btn btn-primary cols-1' onClick={goToNext}>
+                  Next page
+                </button >
+                :
+                <></>
+              }
         </div>
       </div>
     </>

@@ -6,7 +6,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             people: [],
             planets: [],
             starships: [],
-            favorites: []
+            favorites: [],
+            storeIndex: ""
         },
         actions: {
             fetchURL: async (URL) => {
@@ -16,12 +17,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                 let response = await fetch(URL, {
                     method: "GET",
-                    headers: headersList
+                    headers: headersList    
                 });
 
 
                 let data = await response.json();
                 return data
+            },
+            setIndex: (index) => {
+                const {storeIndex} = getStore();
+                setStore({
+                    index: index
+                })
+                console.log(storeIndex)
             },
 
             setCharList: (list) => {

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { Context } from '../context/AppContext'
 
-function Planets({ name, orbital_period, population}) {
+function Planets({ name, orbital_period, population, index}) {
   const { store: { planets, favorites }, actions: { addFavorite } } = useContext(Context)
 
   return (
@@ -17,7 +17,7 @@ function Planets({ name, orbital_period, population}) {
             <p className="card-text">{"Orbital period: "+orbital_period}</p>
             <p className="card-text">{"Population: "+population}</p>
             <Link className="btn btn-primary" 
-            to={{pathname:"/planet"}}
+            to={'/planet/'+index}
             >Learn more!</Link>
             <button className='btn btn-warning'
             onClick={() => { addFavorite(name) }}

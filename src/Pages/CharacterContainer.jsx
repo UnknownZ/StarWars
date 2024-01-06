@@ -10,16 +10,13 @@ function CharacterContainer() {
   const [previousPage, setPreviousPage] = useState("")
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (people.length == 0) {
-        await fetchCharacters(URLS.URL_Characters);
-
-      }
+    if (people.length === 0) {
+      fetchCharacters(URLS.URL_Characters);
+    }
+    else {
       setIsLoading(false);
-    };
-    fetchData();
-    console.log(previousPage)
-    console.log(nextPage)
+    }
+
   }, []);
 
   const fetchCharacters = async (URL) => {
@@ -31,14 +28,14 @@ function CharacterContainer() {
   }
 
   const goToNext = () => {
-      setIsLoading(true)
-      fetchCharacters(nextPage)
+    fetchCharacters(nextPage)
+    setIsLoading(true)
   }
 
   const goToPrevious = () => {
-      setIsLoading(true)
-      fetchCharacters(previousPage)
-    }
+    fetchCharacters(previousPage)
+    setIsLoading(true)
+  }
 
   return (
     <div>
@@ -51,24 +48,25 @@ function CharacterContainer() {
           <div className="row g-4">
             <div className="card-group">
               {
-                people.map((item) => {
+                people.map((item, i) => {
                   return <CharacterCard
                     key={item.url}
                     name={item.name}
                     hairColor={item.hair_color}
                     eyeColor={item.eye_color}
+                    index={i}
                   />
                 })
               }
               {previousPage ?
-                <button className='btn btn-primary cols-1' onClick={goToNext}>
+                <button className='btn btn-primary cols-1' onClick={goToPrevious}>
                   Previous Page
                 </button>
                 :
                 <></>}
 
               {nextPage ?
-                <button className='btn btn-primary cols-1' onClick={goToPrevious}>
+                <button className='btn btn-primary cols-1' onClick={goToNext}>
                   Next page
                 </button >
                 :

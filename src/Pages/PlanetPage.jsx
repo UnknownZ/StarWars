@@ -1,15 +1,45 @@
-import React from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Context } from '../context/AppContext'
 
 function PlanetPage () {
-  const location = useLocation()
-  const name = location.state.variables.name
-  console.log(name)
+  const { index } = useParams()
+  const [planet, setPlanet] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const { store: { planets }, actions: { fetchURL } } = useContext(Context)
+  const planetURL = planets[index].url
 
-  return(
+  useEffect(() => {
+    if (planet.length === 0) {
+      fetchObject(planetURL);
+    }
+    else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchObject = async (URL) => {
+    let data = await fetchURL(URL)
+    setIsLoading(false)
+    setPlanet(data)
+  }
+
+  return (
     <>
-      <h1>{name}</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sit amet metus sit amet faucibus. In hac habitasse platea dictumst. Curabitur accumsan risus quis elementum mollis. Curabitur porta lorem non ullamcorper porttitor. Duis porttitor rhoncus magna, vel rutrum eros. Nulla convallis sed est at lobortis. Pellentesque vitae purus justo. Proin sed lacus et elit ultricies commodo non suscipit erat. </p>
+      {isLoading ? (
+        <div>
+          Loading data...
+        </div>
+      ) :
+        <div>
+          <h1>{planet.name}</h1>
+          <p>Rotation period: {planet.rotation_period}</p>
+          <p>Orbital period: {planet.orbital_period}</p>
+          <p>Diameter: {planet.diameter}</p>
+          <p>Climate: {planet.climate}</p>
+          <p>Population: {planet.population}</p>
+        </div>
+      }
     </>
   )
 }

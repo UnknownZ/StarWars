@@ -1,10 +1,47 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Context } from '../context/AppContext'
 
-function StarshipPage({name}) {
+function StarshipPage() {
+  const { index } = useParams()
+  const [starship, setStarship] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const { store: { starships }, actions: { fetchURL } } = useContext(Context)
+  const starshipURL = starships[index].url
+
+  useEffect(() => {
+    if (starship.length === 0) {
+      fetchObject(starshipURL);
+    }
+    else {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchObject = async (URL) => {
+    let data = await fetchURL(URL)
+    setIsLoading(false)
+    setStarship(data)
+  }
+
   return (
     <>
-      <h1>{name}</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum sit amet metus sit amet faucibus. In hac habitasse platea dictumst. Curabitur accumsan risus quis elementum mollis. Curabitur porta lorem non ullamcorper porttitor. Duis porttitor rhoncus magna, vel rutrum eros. Nulla convallis sed est at lobortis. Pellentesque vitae purus justo. Proin sed lacus et elit ultricies commodo non suscipit erat. </p>
+      {isLoading ? (
+        <div>
+          Loading data...
+        </div>
+      ) :
+        <div>
+          <h1>{starship.name}</h1>
+          <p>Model: {starship.model}</p>
+          <p>Manufacturer: {starship.manufacturer}</p>
+          <p>length: {starship.length}</p>
+          <p>crew: {starship.crew}</p>
+          <p>Passengers: {starship.passengers}</p>
+          <p>Cargo capacity: {starship.cargo_capacity}</p>
+          <p>Starship class: {starship.starship_class}</p>
+        </div>
+      }
     </>
   )
 }
